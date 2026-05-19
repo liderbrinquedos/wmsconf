@@ -1,0 +1,17 @@
+{
+  "name": "Conferencia Mobile",
+  "short_name": "Conferencia",
+  "description": "Sistema de conferencia de notas fiscais",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#f5f5f7",
+  "background_color": "#f5f5f7",
+  "categories": ["business", "productivity"],
+  "icons": [
+    { "src": "/icons/icon-192.svg", "sizes": "192x192", "type": "image/svg+xml" },
+    { "src": "/icons/icon-512.svg", "sizes": "512x512", "type": "image/svg+xml" },
+    { "src": "/icons/icon-maskable.svg", "sizes": "512x512", "type": "image/svg+xml", "purpose": "maskable" }
+  ]
+}
