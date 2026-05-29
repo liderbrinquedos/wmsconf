@@ -5,7 +5,6 @@ export interface ItemConferencia {
   codprod: string
   nome: string
   referencia: string
-  corprod: string
   qtd: number
   qtdemb: number
   leituras: number
@@ -38,7 +37,6 @@ export const useConferenciaStore = defineStore('conferencia', () => {
         codprod: item.codprod,
         nome: prod?.descprod || item.codprod,
         referencia: item.referencia,
-        corprod: item.corprod,
         qtd: item.qtd,
         qtdemb: prod?.qtdemb || 1,
         leituras: 0,

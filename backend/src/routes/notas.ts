@@ -84,7 +84,7 @@ router.get('/:nunota', (req: Request, res: Response) => {
   const notaColumns = ['id', 'nunota', 'numnota', 'codparc', 'razaosocial', 'status', 'conferida_em', 'conferida_por', 'created_at'];
   const nota: any = Object.fromEntries(notaColumns.map((c, i) => [c, notaRow[i]]));
 
-  const itensResult = query('SELECT id, nota_id, codprod, referencia, corprod, qtd FROM itens_nota WHERE nota_id = ?', [nota.id]);
+  const itensResult = query('SELECT id, nota_id, codprod, referencia, qtd FROM itens_nota WHERE nota_id = ?', [nota.id]);
   nota.itens = itensResult.values.map(row =>
     Object.fromEntries(itensResult.columns.map((c, i) => [c, row[i]]))
   );
@@ -122,7 +122,6 @@ router.post('/import', (req: Request, res: Response) => {
         numnota: String(row.numnota || row.NumNota || row.numnota || ''),
         codparc: String(row.codparc || row.CodParc || ''),
         razaosocial: String(row.razaosocial || row.RazaoSocial || ''),
-        corprod: String(row.corprod || row.CorProd || ''),
         referencia: String(row.referencia || row.Referencia || ''),
         qtd: parseInt(row.qtd || row.Qtd || 0, 10),
         codprod: String(row.codprod || row.CodProd || ''),
@@ -147,8 +146,8 @@ router.post('/import', (req: Request, res: Response) => {
 
       for (const item of itens) {
         run(
-          `INSERT INTO itens_nota (nota_id, codprod, referencia, corprod, qtd) VALUES (?, ?, ?, ?, ?)`,
-          [notaId, item.codprod, item.referencia, item.corprod, item.qtd]
+          `INSERT INTO itens_nota (nota_id, codprod, referencia, qtd) VALUES (?, ?, ?, ?)`,
+          [notaId, item.codprod, item.referencia, item.qtd]
         );
       }
       imported++;

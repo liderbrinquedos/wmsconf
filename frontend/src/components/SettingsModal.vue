@@ -23,7 +23,7 @@
       <!-- Importar Notas -->
       <section class="settings-section">
         <h4>Importar Notas Fiscais</h4>
-        <p class="settings-desc">Arquivo .xlsx com colunas: nunota, numnota, codparc, razaosocial, codprod, referencia, corprod, qtd</p>
+         <p class="settings-desc">Arquivo .xlsx com colunas: nunota, numnota, codparc, razaosocial, codprod, referencia, qtd</p>
         <div class="import-zone" @click="triggerNota" @dragover.prevent @drop.prevent="dropNota">
           <span class="import-zone-icon">↑</span>
           <span>{{ notaFile ? notaFile.name : 'Selecionar arquivo' }}</span>

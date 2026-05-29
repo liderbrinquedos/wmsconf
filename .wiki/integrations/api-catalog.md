@@ -126,7 +126,7 @@ Importa notas fiscais via .xlsx. **Admin only.**
 
 **Body:** `multipart/form-data` com campo `file` (.xlsx)
 
-**Colunas esperadas:** `nunota`, `numnota`, `codparc`, `razaosocial`, `codprod`, `referencia`, `corprod`, `qtd`
+**Colunas esperadas:** `nunota`, `numnota`, `codparc`, `razaosocial`, `codprod`, `referencia`, `qtd`
 
 **Resposta 200:** `{ "imported": 3, "errors": [] }`
 

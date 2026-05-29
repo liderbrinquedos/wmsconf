@@ -35,7 +35,6 @@ CREATE TABLE IF NOT EXISTS itens_nota (
     nota_id INTEGER NOT NULL,
     codprod TEXT NOT NULL,
     referencia TEXT DEFAULT '',
-    corprod TEXT DEFAULT '',
     qtd INTEGER NOT NULL,
     FOREIGN KEY (nota_id) REFERENCES notas(id) ON DELETE CASCADE
 );
