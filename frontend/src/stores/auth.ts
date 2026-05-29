@@ -4,6 +4,7 @@ import { ref } from 'vue'
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || '')
   const user = ref<any>(null)
+  const refreshNotasCounter = ref(0)
 
   function setAuth(t: string, u: any) {
     token.value = t
@@ -23,5 +24,9 @@ export const useAuthStore = defineStore('auth', () => {
     return { Authorization: `Bearer ${token.value}` }
   }
 
-  return { token, user, setAuth, logout, getHeaders }
+  function triggerRefreshNotas() {
+    refreshNotasCounter.value++
+  }
+
+  return { token, user, refreshNotasCounter, setAuth, logout, getHeaders, triggerRefreshNotas }
 })

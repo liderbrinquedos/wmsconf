@@ -118,14 +118,21 @@ router.post('/import', (req: Request, res: Response) => {
         notasMap.set(nunota, []);
       }
 
-      notasMap.get(nunota)!.push({
+      const item = {
         numnota: String(row.numnota || row.NumNota || row.numnota || ''),
         codparc: String(row.codparc || row.CodParc || ''),
         razaosocial: String(row.razaosocial || row.RazaoSocial || ''),
         referencia: String(row.referencia || row.Referencia || ''),
         qtd: parseInt(row.qtd || row.Qtd || 0, 10),
         codprod: String(row.codprod || row.CodProd || ''),
-      });
+      };
+
+      const existing = notasMap.get(nunota)!.find(i => i.codprod === item.codprod);
+      if (existing) {
+        existing.qtd += item.qtd;
+      } else {
+        notasMap.get(nunota)!.push(item);
+      }
     }
 
     for (const [nunota, itens] of notasMap) {

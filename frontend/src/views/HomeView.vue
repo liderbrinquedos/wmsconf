@@ -61,11 +61,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { api } from '../services/api'
+import { useAuthStore } from '../stores/auth'
 
 const router = useRouter()
+const auth = useAuthStore()
 const search = ref('')
 const notas = ref<any[]>([])
 const loading = ref(true)
@@ -75,6 +77,10 @@ const stats = computed(() => ({
   pendentes: notas.value.filter(n => n.status === 'pendente').length,
   conferidas: notas.value.filter(n => n.status === 'conferida').length,
 }))
+
+watch(() => auth.refreshNotasCounter, () => {
+  buscar()
+})
 
 function statusBadge(status: string) {
   const map: any = {

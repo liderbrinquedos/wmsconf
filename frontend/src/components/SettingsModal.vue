@@ -106,18 +106,19 @@ function dropProd(e: DragEvent) {
   if (file && file.name.endsWith('.xlsx')) prodFile.value = file
 }
 async function importProdutos() {
-  if (!prodFile.value) return
-  prodUploading.value = true
-  try {
-    await api.produtos.import(prodFile.value)
-    prodFile.value = null
-    alert('Produtos importados com sucesso!')
-  } catch (e: any) {
-    alert(e.message || 'Erro ao importar')
-  } finally {
-    prodUploading.value = false
-  }
-}
+   if (!prodFile.value) return
+   prodUploading.value = true
+   try {
+     await api.produtos.import(prodFile.value)
+     prodFile.value = null
+     auth.triggerRefreshNotas()
+     alert('Produtos importados com sucesso!')
+   } catch (e: any) {
+     alert(e.message || 'Erro ao importar')
+   } finally {
+     prodUploading.value = false
+   }
+ }
 
 // Import Notas
 const notaInput = ref<HTMLInputElement>()
@@ -134,18 +135,19 @@ function dropNota(e: DragEvent) {
   if (file && file.name.endsWith('.xlsx')) notaFile.value = file
 }
 async function importNotas() {
-  if (!notaFile.value) return
-  notaUploading.value = true
-  try {
-    await api.notas.import(notaFile.value)
-    notaFile.value = null
-    alert('Notas importadas com sucesso!')
-  } catch (e: any) {
-    alert(e.message || 'Erro ao importar')
-  } finally {
-    notaUploading.value = false
-  }
-}
+   if (!notaFile.value) return
+   notaUploading.value = true
+   try {
+     await api.notas.import(notaFile.value)
+     notaFile.value = null
+     auth.triggerRefreshNotas()
+     alert('Notas importadas com sucesso!')
+   } catch (e: any) {
+     alert(e.message || 'Erro ao importar')
+   } finally {
+     notaUploading.value = false
+   }
+ }
 
 // Export
 const exporting = ref(false)
