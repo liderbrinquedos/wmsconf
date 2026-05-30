@@ -45,19 +45,21 @@ export const api = {
       delete: (id: number) => request(`/auth/users/${id}`, { method: 'DELETE' }),
     },
   },
-  produtos: {
-    list: (search = '', page = 1) =>
-      request(`/produtos?search=${encodeURIComponent(search)}&page=${page}`),
-    import: (file: File) => {
-      const form = new FormData()
-      form.append('file', file)
-      return request('/produtos/import', {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-        body: form,
-      })
-    },
-  },
+   produtos: {
+     list: (search = '', page = 1, limit?: number) => {
+       const url = `/produtos?search=${encodeURIComponent(search)}&page=${page}${limit !== undefined ? `&limit=${limit}` : ''}`;
+       return request(url);
+     },
+     import: (file: File) => {
+       const form = new FormData()
+       form.append('file', file)
+       return request('/produtos/import', {
+         method: 'POST',
+         headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+         body: form,
+       })
+     },
+   },
   notas: {
     list: (search = '', status = '') =>
       request(`/notas?search=${encodeURIComponent(search)}&status=${status}`),

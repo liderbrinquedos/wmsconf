@@ -8,31 +8,36 @@ const router = Router();
 router.use(authMiddleware);
 
 router.get('/', (req: Request, res: Response) => {
-  const search = (req.query.search as string) || '';
-  const page = parseInt(req.query.page as string, 10) || 1;
-  const limit = Math.min(parseInt(req.query.limit as string, 10) || 50, 200);
-  const offset = (page - 1) * limit;
+   const search = (req.query.search as string) || '';
+   const page = parseInt(req.query.page as string, 10) || 1;
+   const rawLimit = parseInt(req.query.limit as string, 10);
+   const limit = rawLimit && rawLimit > 0 ? rawLimit : (rawLimit === 0 ? 0 : 50);
+   const hasLimit = limit !== 0;
+   const offset = hasLimit ? (page - 1) * (limit > 200 ? 200 : limit) : 0;
 
-  let where = '';
-  const params: any[] = [];
-  if (search) {
-    where = 'WHERE p.descprod LIKE ? OR p.codprod LIKE ? OR p.ean14 LIKE ?';
-    params.push(`%${search}%`, `%${search}%`, `%${search}%`);
-  }
+   let where = '';
+   const params: any[] = [];
+   if (search) {
+     where = 'WHERE descprod LIKE ? OR codprod LIKE ? OR ean14 LIKE ?';
+     params.push(`%${search}%`, `%${search}%`, `%${search}%`);
+   }
 
-  const countRow = queryOne(`SELECT COUNT(*) as total FROM produtos ${where}`, params);
-  const total = (countRow?.[0] as number) || 0;
+   const countRow = queryOne(`SELECT COUNT(*) as total FROM produtos ${where}`, params);
+   const total = (countRow?.[0] as number) || 0;
 
-  const result = query(
-    `SELECT p.id, p.codprod, p.referencia, p.descprod, p.qtdemb, p.ean13, p.ean14, p.updated_at FROM produtos p ${where} ORDER BY p.descprod LIMIT ? OFFSET ?`,
-    [...params, limit, offset]
-  );
+   let sql = `SELECT p.id, p.codprod, p.referencia, p.descprod, p.qtdemb, p.ean13, p.ean14, p.updated_at FROM produtos p ${where} ORDER BY p.descprod`;
+   if (hasLimit) {
+     sql += ' LIMIT ? OFFSET ?';
+   }
+   const queryParams = hasLimit ? [...params, Math.min(limit, 200), offset] : params;
 
-  const produtos = result.values.map(row =>
-    Object.fromEntries(result.columns.map((c, i) => [c, row[i]]))
-  );
+   const result = query(sql, queryParams);
 
-  res.json({ data: produtos, total, page, limit });
+   const produtos = result.values.map(row =>
+     Object.fromEntries(result.columns.map((c, i) => [c, row[i]]))
+   );
+
+   res.json({ data: produtos, total, page, limit: hasLimit ? Math.min(limit, 200) : total ? total : 0 });
 });
 
 router.post('/import', (req: Request, res: Response) => {

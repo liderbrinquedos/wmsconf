@@ -76,10 +76,10 @@
         class="product-detail-card"
         :style="{ borderLeftColor: progressColor(item) }"
       >
-        <div class="product-row">
-          <span style="font-family: 'Sora', sans-serif">{{ item.nome }}</span>
-          <span :class="itemBadge(item)">{{ itemBadgeText(item) }}</span>
-        </div>
+         <div class="product-row">
+           <span style="font-family: 'Sora', sans-serif">{{ item.referencia ? item.referencia + ' - ' : '' }}{{ item.nome }}</span>
+           <span :class="itemBadge(item)">{{ itemBadgeText(item) }}</span>
+         </div>
 
         <div class="flex items-center gap-3 mb-1">
           <span class="text-xs font-mono tabular-nums" :style="{ color: 'var(--text-secondary)' }">
@@ -224,16 +224,17 @@ async function finalizar() {
 }
 
 async function carregar() {
-  try {
-    const notaRes = await api.notas.get(parseInt(props.nunota))
-    nota.value = notaRes.data
-    const prodRes = await api.produtos.list()
-    produtos.value = prodRes.data
-    store.carregarNota(notaRes.data, prodRes.data)
-  } catch (e: any) {
-    showFeedback(e.message, 'error')
-  }
-}
+   try {
+     const notaRes = await api.notas.get(parseInt(props.nunota))
+     nota.value = notaRes.data
+     // Carregar TODOS os produtos (limit=0) para garantir que EANs estejam disponíveis
+     const prodRes = await api.produtos.list('', 1, 0)
+     produtos.value = prodRes.data
+     store.carregarNota(notaRes.data, prodRes.data)
+   } catch (e: any) {
+     showFeedback(e.message, 'error')
+   }
+ }
 
 onMounted(carregar)
 
