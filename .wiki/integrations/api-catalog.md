@@ -68,7 +68,7 @@ Deleta usuario. **Admin only.** Nao permite deletar a si mesmo.
 ### GET `/api/produtos`
 Lista produtos com paginacao.
 
-**Query params:** `search` (opcional), `page` (default 1), `limit` (default 50, max 200)
+**Query params:** `search` (opcional), `page` (default 1), `limit` (default 50, max 200; use `0` para desabilitar paginação e retornar todos os registros)
 
 **Resposta 200:**
 ```json
@@ -127,6 +127,8 @@ Importa notas fiscais via .xlsx. **Admin only.**
 **Body:** `multipart/form-data` com campo `file` (.xlsx)
 
 **Colunas esperadas:** `nunota`, `numnota`, `codparc`, `razaosocial`, `codprod`, `referencia`, `qtd`
+
+> **Nota:** Itens da mesma nota com o mesmo `codprod` são automaticamente deduplicados — a quantidade (`qtd`) é somada em vez de criar linhas duplicadas.
 
 **Resposta 200:** `{ "imported": 3, "errors": [] }`
 

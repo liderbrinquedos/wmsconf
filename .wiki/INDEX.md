@@ -1,7 +1,7 @@
 # .wiki - LLM Knowledge Base
 
 > **Projeto:** Conferencia NF-e
-> **Ultima atualizacao:** 2026-05-19
+> **Ultima atualizacao:** 2026-05-29
 > **Proximo ADR:** ADR-005
 
 Este diretorio e o segundo cerebro do projeto. Subagentes e opencode devem consultar este indice antes de tomar decisoes.

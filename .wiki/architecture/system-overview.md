@@ -56,7 +56,7 @@ usuarios ──┬── notas ──┬── itens_nota
 | `usuarios` | id, username, password, role |
 | `produtos` | id, codprod, referencia, descprod, qtdemb, ean13, ean14 |
 | `notas` | id, nunota, numnota, codparc, razaosocial, status |
-| `itens_nota` | id, nota_id, codprod, referencia, corprod, qtd |
+| `itens_nota` | id, nota_id, codprod, referencia, qtd |
 | `conferencias` | id, nota_id, usuario_id, status, iniciada_em, finalizada_em |
 | `leituras` | id, conferencia_id, codprod, ean_lido, qtd_emb |
 | `locks` | nota_id, usuario_id, iniciado_em |
@@ -109,5 +109,5 @@ sql.js opera em memoria. Cada `save()` exporta o banco como buffer e escreve no 
 
 | Service | Build | Ports | Volumes |
 |---|---|---|---|
-| frontend | `./frontend` | 80:80 | — |
+| frontend | `./frontend` | 8023:80 | — |
 | backend | `./backend` | 3001:3001 | conferencia-data:/app/data |

@@ -103,6 +103,7 @@ conferencia/
 - Gerenciamento de usuarios (admin)
 - Tema dark/light
 - Padrao visual Clean Tech (mwms)
+- Filtro de notas por status (pendente/conferida) no dashboard
 
 ## Permissoes
 
