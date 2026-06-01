@@ -37,5 +37,5 @@ cd backend && npm run seed     # criar usuario admin
 
 ## Rotas
 - `/login` (public), `/home`, `/conferencia/:nunota`
-- Frontend: porta 80 (Docker) / 5173 (dev)
+- Frontend: porta 8023 (Docker) / 5173 (dev)
 - Backend: porta 3001
