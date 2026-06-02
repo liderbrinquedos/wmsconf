@@ -1,91 +1,84 @@
 <template>
   <div>
     <!-- Stats -->
-    <div class="stats-bar">
-      <div class="stat-card-mobile">
-        <div>Total</div>
-        <div>{{ stats.total }}</div>
+    <div class="grid grid-cols-3 gap-3 mb-6">
+      <div class="card p-4">
+        <div class="text-xs text-text-muted font-bold uppercase tracking-widest mb-1">Total</div>
+        <div class="text-2xl font-black text-text">{{ stats.total }}</div>
       </div>
-      <div class="stat-card-mobile">
-        <div>Pendentes</div>
-        <div>{{ stats.pendentes }}</div>
+      <div class="card p-4">
+        <div class="text-xs text-text-muted font-bold uppercase tracking-widest mb-1">Pendente</div>
+        <div class="text-2xl font-black text-accent">{{ stats.pendentes }}</div>
       </div>
-      <div class="stat-card-mobile">
-        <div>Conferidas</div>
-        <div>{{ stats.conferidas }}</div>
+      <div class="card p-4">
+        <div class="text-xs text-text-muted font-bold uppercase tracking-widest mb-1">Ok</div>
+        <div class="text-2xl font-black text-success">{{ stats.conferidas }}</div>
       </div>
     </div>
 
-    <!-- Search + Filter -->
-    <div class="search-section relative">
-      <div class="search-wrapper relative">
-        <span class="search-icon">⌕</span>
+    <!-- Toolbar Minimalista -->
+    <div class="flex gap-2 mb-6">
         <input
           v-model="search"
           type="text"
           placeholder="Buscar NF ou cliente..."
-          autocomplete="off"
+          class="flex-1 bg-surface border border-surface-light p-4 rounded text-text font-bold"
           @input="buscar"
         />
         <button
-          class="filter-btn"
-          :class="{ active: !!filterStatus }"
-          @click.stop="toggleFilter"
-          title="Filtrar por status"
+          class="w-14 bg-surface border border-surface-light rounded flex items-center justify-center text-text-muted hover:border-accent hover:text-accent transition-all"
+          @click="showFilter = true"
         >
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
           </svg>
-          <span v-if="filterStatus" class="filter-dot"></span>
         </button>
-      </div>
+    </div>
 
-      <!-- Backdrop -->
-      <div v-if="showFilter" class="filter-backdrop" @click="showFilter = false"></div>
-
-      <!-- Filter panel -->
-      <transition name="slide-down">
-        <div v-if="showFilter" class="filter-panel" @click.stop>
-          <div class="filter-row">
-            <label>Status</label>
-            <select v-model="filterStatus" class="filter-select">
-              <option value="">Todos</option>
-              <option value="pendente">Pendente</option>
-              <option value="conferida">Conferida</option>
-            </select>
-          </div>
-          <div class="filter-actions">
-            <button class="btn btn-primary text-xs px-3 py-1" @click="applyFilter">Aplicar</button>
-            <button class="btn text-xs px-3 py-1" :style="{ background: 'var(--border)', color: 'var(--text)' }" @click="clearFilter">Limpar</button>
-          </div>
+    <!-- Filter Overlay -->
+    <div v-if="showFilter" class="fixed inset-0 bg-bg/80 backdrop-blur-sm z-50" @click="showFilter = false"></div>
+    <div class="fixed top-0 right-0 h-full w-[280px] bg-surface z-50 p-6 transform transition-transform duration-300" :class="showFilter ? 'translate-x-0' : 'translate-x-full'">
+        <div class="flex justify-between items-center mb-6">
+            <h3 class="text-lg font-black text-text">Filtros</h3>
+            <button @click="showFilter = false" class="text-text-muted">✕</button>
         </div>
-      </transition>
+        
+        <div class="mb-6">
+            <label class="block text-xs text-text-muted font-bold uppercase tracking-widest mb-2">Status</label>
+            <select v-model="filterStatus" class="w-full bg-bg border border-surface-light p-3 rounded text-text font-bold">
+              <option value="pendente">Pendente</option>
+              <option value="conferida">Concluída</option>
+            </select>
+        </div>
+
+        <button class="btn" @click="applyFilter">Aplicar</button>
     </div>
 
     <!-- Loading -->
-    <div v-if="loading" class="text-center py-8" :style="{ color: 'var(--text-secondary)' }">Carregando...</div>
+    <div v-if="loading" class="text-center py-8 text-text-muted">Carregando...</div>
 
     <!-- Empty -->
-    <div v-else-if="notas.length === 0" class="text-center py-10">
-      <div class="text-[1rem] font-medium mb-1" :style="{ color: 'var(--text-secondary)' }">Nenhuma nota encontrada</div>
-      <div class="text-[0.85rem]" :style="{ color: 'var(--text-secondary)' }">Importe uma nota fiscal para comecar</div>
+    <div v-else-if="notas.length === 0" class="card text-center py-10">
+      <div class="text-text">Nenhuma nota encontrada</div>
     </div>
 
     <!-- Notes List -->
-    <div v-else class="flex flex-col gap-2 px-4">
+    <div v-else class="flex flex-col gap-3">
       <div
         v-for="nota in notas"
         :key="nota.nunota"
         @click="selecionarNota(nota.nunota)"
-        class="hierarchy-card"
+        class="card flex justify-between items-center cursor-pointer border-l-4 hover:border-accent transition-all"
+        :class="nota.status === 'conferida' ? 'border-l-success' : 'border-l-accent'"
       >
-        <div>
-          <span class="card-title" :style="{ fontFamily: '\'Sora\', sans-serif' }">NF-e {{ nota.numnota }}</span>
-          <div class="text-[0.75rem] mt-0.5" :style="{ color: 'var(--text-secondary)' }">{{ nota.razaosocial }}</div>
+        <div class="flex-1">
+          <div class="text-xs text-text-muted font-bold mb-1">NF {{ nota.numnota }}</div>
+          <div class="text-lg font-bold text-text">{{ nota.razaosocial }}</div>
         </div>
-        <div class="flex flex-col items-end gap-1">
-          <span :class="statusBadge(nota.status)">{{ statusLabel(nota.status) }}</span>
-          <span class="card-badge">{{ nota.itens?.length || 0 }} itens</span>
+        <div class="text-right">
+          <span class="px-2 py-1 rounded text-[0.6rem] font-black uppercase" :class="nota.status === 'conferida' ? 'bg-success/10 text-success' : 'bg-accent/10 text-accent'">
+             {{ statusLabel(nota.status) }}
+          </span>
         </div>
       </div>
     </div>
@@ -101,7 +94,7 @@ import { useAuthStore } from '../stores/auth'
 const router = useRouter()
 const auth = useAuthStore()
 const search = ref('')
-const filterStatus = ref('') // 'pendente', 'conferida', or ''
+const filterStatus = ref('pendente')
 const showFilter = ref(false)
 const notas = ref<any[]>([])
 const loading = ref(true)
@@ -116,35 +109,15 @@ watch(() => auth.refreshNotasCounter, () => {
   buscar()
 })
 
-function statusBadge(status: string) {
-  const map: any = {
-    pendente: 'badge pendente',
-    conferida: 'badge ok',
-    excesso: 'badge excesso',
-  }
-  return map[status] || 'badge pendente'
-}
-
 function statusLabel(status: string) {
   const map: any = {
     pendente: 'Pendente',
-    conferida: 'Conferida',
-    excesso: 'Excesso',
+    conferida: 'Concluída',
   }
   return map[status] || status
 }
 
-function toggleFilter() {
-  showFilter.value = !showFilter.value
-}
-
 function applyFilter() {
-  showFilter.value = false
-  buscar()
-}
-
-function clearFilter() {
-  filterStatus.value = ''
   showFilter.value = false
   buscar()
 }
@@ -166,94 +139,9 @@ async function selecionarNota(nunota: number) {
     await api.locks.acquire(nunota)
     router.push(`/conferencia/${nunota}`)
   } catch (e: any) {
-    alert(e.message || 'Nota em conferencia por outro operador')
+    alert(e.message || 'Nota em conferência por outro operador')
   }
 }
 
 onMounted(buscar)
 </script>
-
-<style scoped>
-.filter-btn {
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  opacity: 0.6;
-  padding: 4px;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.filter-btn:hover {
-  opacity: 1;
-}
-.filter-btn.active .filter-dot {
-  opacity: 1;
-}
-.filter-dot {
-  position: absolute;
-  right: -4px;
-  top: -2px;
-  width: 6px;
-  height: 6px;
-  background: var(--danger, #ef4444);
-  border-radius: 50%;
-  opacity: 0.8;
-}
-.filter-backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-}
-.filter-panel {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  margin-top: 4px;
-  padding: 12px;
-  background: var(--surface-secondary, #f3f4f6);
-  border-radius: var(--radius-md, 8px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  z-index: 101;
-}
-.filter-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 12px;
-}
-.filter-row label {
-  font-size: 0.875rem;
-  color: var(--text-secondary, #6b7280);
-}
-.filter-select {
-  flex: 1;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm, 4px);
-  border: 1px solid var(--border, #e5e7eb);
-  background: var(--bg, #fff);
-  color: var(--text, #000);
-  font-size: 0.875rem;
-}
-.filter-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-/* Slide-down transition */
-.slide-down-enter-active,
-.slide-down-leave-active {
-  transition: all 0.2s ease-out;
-}
-.slide-down-enter-from,
-.slide-down-leave-to {
-  opacity: 0;
-  transform: translateY(-4px);
-}
-</style>

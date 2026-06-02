@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '../views/LoginView.vue'
 import HomeView from '../views/HomeView.vue'
 import ConferenceView from '../views/ConferenceView.vue'
+import SettingsView from '../views/SettingsView.vue'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,6 +11,7 @@ const router = createRouter({
     { path: '/login', name: 'login', component: LoginView, meta: { public: true } },
     { path: '/home', name: 'home', component: HomeView },
     { path: '/conferencia/:nunota', name: 'conferencia', component: ConferenceView, props: true },
+    { path: '/settings', name: 'settings', component: SettingsView },
   ],
 })
 

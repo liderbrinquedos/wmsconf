@@ -4,358 +4,52 @@
 
 @layer base {
   :root {
-    --bg: #f5f5f7;
-    --surface: #ffffff;
-    --surface-secondary: #f2f2f5;
-    --border: #e0e0e4;
-    --text: #1d1d1f;
-    --text-secondary: #86868b;
-    --accent: #0071e3;
-    --accent-hover: #0077ed;
-    --success: #34c759;
-    --danger: #ff3b30;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-    --radius: 10px;
-    --radius-sm: 8px;
+    --bg: #0f172a;
+    --surface: #1e293b;
+    --surface-light: #334155;
+    --accent: #e11d48;
+    --text: #f8fafc;
+    --text-muted: #94a3b8;
+    --success: #22c55e;
+    --danger: #ef4444;
   }
 
-  [data-theme="dark"] {
-    --bg: #1d1d1f;
-    --surface: #2d2d2f;
-    --surface-secondary: #3a3a3c;
-    --border: #48484a;
-    --text: #f5f5f7;
-    --text-secondary: #98989d;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
-  }
-
-  * {
-    -webkit-tap-highlight-color: transparent;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
   body {
-    background: var(--bg);
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background-color: var(--bg);
     color: var(--text);
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
-    -webkit-font-smoothing: antialiased;
-    transition: background 0.2s, color 0.2s;
+    min-height: 100vh;
   }
 
-  input, button {
-    font-family: inherit;
-  }
+  h1, h2, h3 { font-family: 'Syne', sans-serif; text-transform: uppercase; letter-spacing: -0.02em; }
 }
 
 @layer components {
-  /* ─── Header ─── */
-
-  .app-header {
-    @apply sticky top-0 z-10 backdrop-blur-xl;
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-  }
-
-  .header-inner {
-    @apply flex items-center justify-between px-4 py-2.5;
-  }
-
-  .logo h1 {
-    font-family: 'Sora', sans-serif;
-    font-size: 1.15rem;
-    font-weight: 600;
-    color: var(--text);
-    letter-spacing: -0.02em;
-  }
-
-  .header-actions { @apply flex items-center; gap: 6px; }
-
-  .icon-btn {
-    @apply rounded-full w-9 h-9 flex items-center justify-center cursor-pointer;
-    background: none;
-    border: none;
-    color: var(--text-secondary);
-    transition: background 0.15s, color 0.15s;
-  }
-
-  .icon-btn:hover { background: var(--surface-secondary); color: var(--text); }
-
-  /* ─── Search ─── */
-
-  .search-section { @apply px-4 pb-3; }
-
-  .search-wrapper {
-    @apply flex items-center gap-1.5 px-3 rounded-[var(--radius)];
-    background: var(--surface-secondary);
-    border: 1px solid transparent;
-    transition: border-color 0.15s, background 0.15s;
-  }
-
-  .search-wrapper:focus-within {
-    border-color: var(--accent);
-    background: var(--surface);
-  }
-
-  .search-icon { color: var(--text-secondary); font-size: 1rem; }
-
-  .search-wrapper input {
-    @apply flex-1 bg-transparent border-none outline-none text-[15px] py-2.5;
-    color: var(--text);
-  }
-
-  .search-wrapper input::placeholder { color: var(--text-secondary); }
-
-  /* ─── Stats ─── */
-
-  .stats-bar {
-    @apply flex gap-2 px-4 pt-3 pb-2 overflow-x-auto;
-    scrollbar-width: none;
-  }
-
-  .stats-bar::-webkit-scrollbar { display: none; }
-
-  .stat-card-mobile {
-    @apply px-4 py-3 rounded-[var(--radius)] min-w-[110px] text-[0.78rem];
-    background: var(--surface);
-    box-shadow: var(--shadow-sm);
-    color: var(--text-secondary);
-    line-height: 1.4;
-  }
-
-  .stat-card-mobile div:last-child {
-    font-family: 'Sora', sans-serif;
-    font-size: 1.35rem;
-    font-weight: 600;
-    color: var(--text);
-    margin-top: 2px;
-  }
-
-  /* ─── Cards ─── */
-
-  .hierarchy-card {
-    @apply rounded-[var(--radius)] px-4 py-3.5 cursor-pointer flex justify-between items-center;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.12s, box-shadow 0.12s;
-  }
-
-  .hierarchy-card:active { transform: scale(0.98); }
-
-  .card-title {
-    @apply font-medium text-[0.95rem];
-    color: var(--text);
-  }
-
-  .card-badge {
-    @apply px-2.5 py-0.5 rounded-[20px] text-[0.68rem];
-    background: var(--surface-secondary);
-    color: var(--text-secondary);
-    white-space: nowrap;
-  }
-
-  .product-detail-card {
-    @apply rounded-[var(--radius)] p-4 cursor-pointer;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--success);
-    box-shadow: var(--shadow-sm);
-    transition: transform 0.12s, box-shadow 0.12s;
-  }
-
-  .product-detail-card:active { transform: scale(0.98); }
-
-  .product-row {
-    @apply flex justify-between items-center mb-1.5;
-  }
-
-  .product-row span:first-child {
-    @apply font-medium text-[0.95rem];
-  }
-
-  /* ─── Buttons ─── */
-
+  /* Botões e Formas */
   .btn {
-    @apply rounded-[var(--radius-sm)] px-5 py-3 text-[0.9rem] font-medium border-none cursor-pointer flex-1;
-    transition: opacity 0.15s, transform 0.1s;
-  }
-
-  .btn:active { transform: scale(0.97); }
-
-  .btn-primary { background: var(--accent); color: white; }
-  .btn-primary:hover { opacity: 0.9; }
-
-  .btn-success { background: var(--success); color: white; }
-
-  .btn-danger { background: var(--surface-secondary); color: var(--danger); }
-
-  /* ─── Modal ─── */
-
-  .modal {
-    @apply fixed inset-0 z-50 justify-center items-end hidden;
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-  }
-
-  .modal.active { display: flex; }
-
-  .modal-sheet {
-    @apply w-full max-h-[85vh] overflow-y-auto px-5 pt-5 pb-7;
-    background: var(--surface);
-    border-radius: 14px 14px 0 0;
-    animation: sheetUp 0.25s ease-out;
-  }
-
-  @keyframes sheetUp {
-    from { transform: translateY(20px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
-  }
-
-  .modal-header {
-    @apply flex justify-between items-center mb-4;
-  }
-
-  .modal-header h3 {
-    @apply text-[1.05rem] font-semibold;
-    font-family: 'Sora', sans-serif;
-  }
-
-  .modal-x {
-    @apply w-8 h-8 text-[0.9rem] rounded-full flex items-center justify-center cursor-pointer;
-    background: none;
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    color: white;
     border: none;
-    color: var(--text-secondary);
-    transition: background 0.15s;
+    border-radius: 4px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.2s;
   }
+  .btn:active { transform: scale(0.98); }
 
-  .modal-x:hover { background: var(--surface-secondary); }
-
-  .modal-actions {
-    @apply flex gap-2.5 mt-5;
-  }
-
-  /* ─── Login ─── */
-
-  .login-screen {
-    @apply fixed inset-0 z-[2000] flex items-center justify-center px-6;
+  .card {
     background: var(--surface);
+    padding: 20px;
+    border-radius: 4px;
+    border: 1px solid rgba(255,255,255,0.05);
+    margin-bottom: 12px;
   }
 
-  .login-screen.hidden { display: none; }
-
-  .login-box { @apply text-center w-full max-w-xs; }
-
-  .login-title {
-    @apply text-[1.6rem] font-semibold mb-1;
-    font-family: 'Sora', sans-serif;
-    color: var(--text);
-  }
-
-  .login-subtitle {
-    @apply text-[0.85rem] mb-6;
-    color: var(--text-secondary);
-  }
-
-  /* ─── Form ─── */
-
-  .form-group { @apply mb-3.5; }
-
-  .form-group label {
-    @apply block text-[0.72rem] font-medium mb-1 uppercase tracking-[0.03em];
-    color: var(--text-secondary);
-  }
-
-  .form-group input, .form-group select {
-    @apply w-full px-3 py-3 rounded-[var(--radius-sm)] text-[15px] outline-none;
-    border: 1px solid var(--border);
-    background: var(--surface-secondary);
-    color: var(--text);
-    transition: border-color 0.15s;
-  }
-
-  .form-group input:focus, .form-group select:focus {
-    border-color: var(--accent);
-  }
-
-  /* ─── Import Zone ─── */
-
-  .import-zone {
-    @apply rounded-[var(--radius)] px-5 py-5 text-center cursor-pointer text-[0.85rem];
-    border: 2px dashed var(--border);
-    color: var(--text-secondary);
-    transition: border-color 0.15s, background 0.15s;
-  }
-
-  .import-zone:hover { border-color: var(--accent); background: var(--surface-secondary); }
-
-  .import-zone-icon { @apply block text-[1.5rem] mb-1; }
-
-  /* ─── Toast ─── */
-
-  .toast {
-    @apply fixed bottom-20 left-4 right-4 mx-auto w-fit max-w-[90%] px-4 py-2.5 rounded-[var(--radius-sm)] text-[0.85rem] font-medium z-[1050] opacity-0 translate-y-2 transition-all duration-200 pointer-events-none text-center;
-    background: var(--text);
-    color: var(--bg);
-  }
-
-  .toast.visible { @apply opacity-100 translate-y-0; }
-
-  /* ─── Badge ─── */
-
-  .badge {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium;
-  }
-
-  .badge-ok {
-    @apply bg-emerald-500/10 text-emerald-600;
-  }
-
-  .badge-parcial {
-    @apply bg-amber-500/10 text-amber-600;
-  }
-
-  .badge-falta {
-    @apply bg-red-500/10 text-red-600;
-  }
-
-  .badge-excesso {
-    @apply bg-red-500/10 text-red-600;
-  }
-
-  .badge-pendente {
-    @apply bg-gray-400/10 text-gray-500;
-  }
-
-  /* ─── Settings ─── */
-
-  .settings-section {
-    @apply mb-6 pb-6;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .settings-section:last-child {
-    border-bottom: none;
-    margin-bottom: 0;
-    padding-bottom: 0;
-  }
-
-  .settings-section h4 {
-    @apply text-[0.85rem] font-semibold mb-2;
-    font-family: 'Sora', sans-serif;
-    color: var(--text);
-  }
-
-  .settings-desc {
-    @apply text-[0.78rem] mb-2.5;
-    color: var(--text-secondary);
-  }
-
-  /* ─── Responsive ─── */
-
-  @media (max-width: 480px) {
-    .stat-card-mobile { min-width: 90px; }
-    .product-row { flex-direction: column; gap: 4px; }
-  }
+  /* ... outros estilos serão adicionados conforme a necessidade ... */
 }
